@@ -1,0 +1,6 @@
+usbd_dfu_flash.c:153:10:Flash_If_Read	9
+usbd_dfu_flash.c:172:10:Flash_If_GetStatus	1
+usbd_dfu_flash.c:62:10:Flash_If_Init	1
+usbd_dfu_flash.c:74:10:Flash_If_DeInit	1
+usbd_dfu_flash.c:86:10:Flash_If_Erase	3
+usbd_dfu_flash.c:117:10:Flash_If_Write	5

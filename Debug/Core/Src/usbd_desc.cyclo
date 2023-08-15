@@ -1,0 +1,15 @@
+usbd_desc.c:175:10:USBD_DFU_DeviceDescriptor	1
+usbd_desc.c:187:10:USBD_DFU_LangIDStrDescriptor	1
+usbd_desc.c:466:11:USBD_FS_DeviceDescriptor	1
+usbd_desc.c:478:11:USBD_FS_LangIDStrDescriptor	1
+usbd_desc.c:577:11:USBD_FS_USR_BOSDescriptor	1
+usbd_desc.c:199:10:USBD_DFU_ProductStrDescriptor	1
+usbd_desc.c:211:10:USBD_DFU_ManufacturerStrDescriptor	1
+usbd_desc.c:239:10:USBD_DFU_ConfigStrDescriptor	1
+usbd_desc.c:251:10:USBD_DFU_InterfaceStrDescriptor	1
+usbd_desc.c:490:11:USBD_FS_ProductStrDescriptor	1
+usbd_desc.c:538:11:USBD_FS_ConfigStrDescriptor	1
+usbd_desc.c:557:11:USBD_FS_InterfaceStrDescriptor	1
+usbd_desc.c:223:10:USBD_DFU_SerialStrDescriptor	14
+usbd_desc.c:509:11:USBD_FS_ManufacturerStrDescriptor	1
+usbd_desc.c:521:11:USBD_FS_SerialStrDescriptor	14

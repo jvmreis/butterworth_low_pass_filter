@@ -1,0 +1,7 @@
+NanoEdgeAI.c:188:6:funchad53_constprop_0	46
+NanoEdgeAI.c:491:12:neai_anomalydetection_init	2
+NanoEdgeAI.c:541:7:neai_anomalydetection_learn	7
+NanoEdgeAI.c:1323:6:neai_anomalydetection_detect	22
+NanoEdgeAI.c:1611:11:neai_anomalydetection_set_sensitivity	1
+NanoEdgeAI.c:1620:12:neai_anomalydetection_get_sensitivity	1
+NanoEdgeAI.c:1630:11:neai_anomalydetection_knowledge	21

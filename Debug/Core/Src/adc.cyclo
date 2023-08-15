@@ -1,0 +1,3 @@
+adc.c:17:6:adc_init	1
+adc.c:23:6:adc_mic_config3	1
+adc.c:98:6:adc_set_fs	1
