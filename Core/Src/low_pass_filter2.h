@@ -33,7 +33,7 @@ void filter2_reset( filter2Type * pThis );
 #define filter2_readOutput( pThis )  \
     (pThis)->output
 
-int filter2_filterBlock( filter2Type * pThis, float * pInput, float * pOutput, unsigned int count );
+int filterC_filterBlock( filter2Type * pThis, float * pInput, float * pOutput, unsigned int count );
 #define filter2_outputToFloat( output )  \
     (output)
 

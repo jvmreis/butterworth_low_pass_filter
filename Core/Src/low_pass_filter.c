@@ -45,7 +45,7 @@ void filter1_reset( filter1Type * pThis )
 	pThis->output = 0;									// Reset output
 }
 
-int filter1_filterBlock( filter1Type * pThis, float * pInput, float * pOutput, unsigned int count )
+int filterCMSIS_filterBlock( filter1Type * pThis, float * pInput, float * pOutput, unsigned int count )
 {
 	arm_biquad_cascade_df1_f32( &pThis->instance, pInput, pOutput, count );
 	return count;

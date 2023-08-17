@@ -65,6 +65,8 @@ void Error_Handler(void);
 #define USB_N_GPIO_Port GPIOA
 #define USB_P_Pin GPIO_PIN_12
 #define USB_P_GPIO_Port GPIOA
+#define TIME_GET_Pin GPIO_PIN_1
+#define TIME_GET_GPIO_Port GPIOC
 #define BOTAO_Pin GPIO_PIN_7
 #define BOTAO_GPIO_Port GPIOC
 #define AUDIO_IN_Pin GPIO_PIN_15

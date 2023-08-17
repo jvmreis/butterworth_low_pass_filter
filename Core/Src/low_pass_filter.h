@@ -29,7 +29,7 @@ void filter1_reset( filter1Type * pThis );
 	pThis->output
 
 
-int filter1_filterBlock( filter1Type * pThis, float * pInput, float * pOutput, unsigned int count );
+int filterCMSIS_filterBlock( filter1Type * pThis, float * pInput, float * pOutput, unsigned int count );
 #define filter1_outputToFloat( output )  \
     (output)
 

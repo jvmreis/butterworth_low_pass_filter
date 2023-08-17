@@ -1,6 +1,6 @@
-low_pass_filter2.c:23:14:filter2_create	1
-low_pass_filter2.c:30:6:filter2_destroy	1
-low_pass_filter2.c:35:6:filter2_init	1
-low_pass_filter2.c:40:6:filter2_reset	1
-low_pass_filter2.c:68:6:filter2_filterBiquad	3
-low_pass_filter2.c:46:5:filter2_filterBlock	2
+low_pass_filter2.c:25:14:filter2_create	1
+low_pass_filter2.c:32:6:filter2_destroy	1
+low_pass_filter2.c:37:6:filter2_init	1
+low_pass_filter2.c:42:6:filter2_reset	1
+low_pass_filter2.c:70:6:filter2_filterBiquad	3
+low_pass_filter2.c:48:5:filterC_filterBlock	2

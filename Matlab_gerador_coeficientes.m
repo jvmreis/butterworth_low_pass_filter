@@ -1,20 +1,20 @@
-% ESPECIFICAÇÕES DO FILTRO
+% ESPECIFICAÃ‡Ã•ES DO FILTRO
 fs = 48000;             % Taxa de amostragem em Hz
 Fs_Hz=fs;
-stopband_freq = 3000;   % Frequência de corte da banda de rejeição em Hz
-passband_freq = 2000;   % Frequência de corte da banda passante em Hz
+stopband_freq = 3600;   % FrequÃªncia de corte da banda de rejeiÃ§Ã£o em Hz
+passband_freq = 2000;   % FrequÃªncia de corte da banda passante em Hz
 
-delta_passband = 0.01;  % Tolerância de ganho na banda passante
-delta_stopband = 0.001; % Tolerância de ganho na banda de rejeição
+delta_passband = 0.01;  % TolerÃ¢ncia de ganho na banda passante
+delta_stopband = 0.001; % TolerÃ¢ncia de ganho na banda de rejeiÃ§Ã£o
 
-% Normalização das frequências
+% NormalizaÃ§Ã£o das frequÃªncias
 Wp = (passband_freq / (fs/2));
 Ws = (stopband_freq / (fs/2));
 
-ap = -20 * log10(delta_passband); % Atenuação na banda de rejeição em dB
-as = -20 * log10(delta_stopband); % Atenuação na banda passante em dB
+ap = -20 * log10(delta_passband); % AtenuaÃ§Ã£o na banda de rejeiÃ§Ã£o em dB
+as = -20 * log10(delta_stopband); % AtenuaÃ§Ã£o na banda passante em dB
 
-[N, wc] = buttord(Wp, Ws, ap, as); % Retorna a ordem do filtro e a frequência de corte
+[N, wc] = buttord(Wp, Ws, ap, as); % Retorna a ordem do filtro e a frequÃªncia de corte
 
 % Projeto do filtro Butterworth
 [b, a] = butter(N, wc, 'low');
@@ -24,8 +24,12 @@ FName="low";
 
     % Print transfer function
     fprintf('\nFilter Transfer Function:\n');
+    fprintf('ordem:%d\n', N);
     fprintf('Numerator:%s\n', mat2str(b));
     fprintf('Denominator:%s\n', mat2str(a));
+
+    a1=mat2str(a);
+    b2=mat2str(b);
     
     % Convert filter to second-order sections
     sos = tf2sos(b, a);
@@ -99,5 +103,3 @@ FName="low";
         end
     end
     b_coeff = [b_coeff(1:end-1), '};\n']
-    
-   

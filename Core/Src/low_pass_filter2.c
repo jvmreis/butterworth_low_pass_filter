@@ -10,15 +10,17 @@
 #include <stdlib.h> // For malloc/free
 #include <string.h> // For memset
 
-float filter2_coefficients[10] =
-{
-// Scaled for floating point
+//float filter2_coefficients[10] =
+//{
+//// Scaled for floating point
+//
+//    0.013640878526405022, 0.027281757052810045, 0.013640878526405022, 1.5590543011416917, -0.614051781937882,// b0, b1, b2, a1, a2
+//    0.015625, 0.03125, 0.015625, 1.7577536094827262, -0.8197604429273134// b0, b1, b2, a1, a2
+//
+//};
 
-    0.013640878526405022, 0.027281757052810045, 0.013640878526405022, 1.5590543011416917, -0.614051781937882,// b0, b1, b2, a1, a2
-    0.015625, 0.03125, 0.015625, 1.7577536094827262, -0.8197604429273134// b0, b1, b2, a1, a2
-
-};
-
+float32_t filter2_coefficients[10] ={2.1314e-04,4.2628e-04,2.1314e-04,1.5591,-0.6141,
+										1,2,1.7578,-0.8198};
 
 filter2Type *filter2_create( void )
 {
@@ -43,7 +45,7 @@ void filter2_reset( filter2Type * pThis )
     pThis->output = 0;                                    // Reset output
 }
 
-int filter2_filterBlock( filter2Type * pThis, float * pInput, float * pOutput, unsigned int count )
+int filterC_filterBlock( filter2Type * pThis, float * pInput, float * pOutput, unsigned int count )
 {
     filter2_executionState executionState;          // The executionState structure holds call data, minimizing stack reads and writes
     if( ! count ) return 0;                         // If there are no input samples, return immediately

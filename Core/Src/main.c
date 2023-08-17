@@ -75,17 +75,25 @@
  * há um "\0" para marcar o fim da string (1 caracter)
  */
 #define N 15*NumAmostras
-#define N_filter 6
-
 int32_t sai_data[NumAmostras];
 float int_sai_data_filter[NumAmostras];
 float sai_data_filter[NumAmostras];
 
-float a[]= {1,-5.514635515723137,12.689567164247162,-15.594458394508003,10.794044128201001,-3.989699331813231,0.615185058832997};
-float b[]={4.858182486754450e-08,2.914909492052670e-07,7.287273730131675e-07,9.716364973508900e-07,7.287273730131675e-07,2.914909492052670e-07,4.858182486754450e-08};
+uint32_t start_get_time = 0;
+uint32_t stop_get_time = 0;
+
+// filtro de ordem 6
+//#define N_filter 6
+//float a[]= {1,-5.514635515723137,12.689567164247162,-15.594458394508003,10.794044128201001,-3.989699331813231,0.615185058832997};
+//float b[]={4.858182486754450e-08,2.914909492052670e-07,7.287273730131675e-07,9.716364973508900e-07,7.287273730131675e-07,2.914909492052670e-07,4.858182486754450e-08};
+
+// filtro de ordem 4
+#define N_filter 4
+// coeficientes do filtro iir
+float a[]=	{1, -3.77704525591331, 5.35565449342871, -3.37862309614059, 0.800061402744814};
+float b[]=	{2.97150747683261e-06, 1.18860299073305e-05, 1.78290448609957e-05, 1.18860299073305e-05, 2.97150747683261e-06};
 
 //float  sai_data_f[NumAmostras];
-
 bool cdcTransmitionCplt = 1;
 
 /* USER CODE END PV */
@@ -99,18 +107,24 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void filterSignal(float *input, float *output, int signalLength) {
+
+// função para usar filtro na forma direta
+void filterDirectSignal(float *input, float *output, int signalLength) {
     for (int i = N_filter; i < signalLength; i++) {
         output[i] = 0;
+		  HAL_GPIO_WritePin(GPIOC, TIME_GET_Pin, GPIO_PIN_SET);
+
         for (int j = 0; j <= N_filter; j++) {
             output[i] += b[j] * input[i - j];
             if (j > 0) {
                 output[i] -= a[j] * output[i - j];
             }
         }
+		  HAL_GPIO_WritePin(GPIOC, TIME_GET_Pin, GPIO_PIN_RESET);
+
     }
 }
-
+/*
 const int8_t LP_a_bytes[24]={
 	0x55,0xd2,0xc5,0xbf,
 	0x9a,0x99,0x19,0x3f,
@@ -134,7 +148,7 @@ const float* LP_b = (float*) LP_b_bytes;
 //Delay Variables
 float LP_w[6]={0,0,0,0,0,0};
 
-float LP_Update(float x)
+float LP_Update6(float x)
 {
 	float y;
 	float w;
@@ -153,6 +167,43 @@ float LP_Update(float x)
 	y = w*LP_b[6]+LP_w[4]*LP_b[7]+LP_w[5]*LP_b[8];
 	LP_w[5]=LP_w[4];
 	LP_w[4]=w;
+	return y;
+}*/
+
+// função para usar filtro na forma cascata (transfomrmada z dividia em sessões de ordem 2)
+//Filter Coefficients
+const int8_t LP_a_bytes[16]={
+	0xc0,0x38,0x2c,0xbf,
+	0x9,0x1,0x14,0x3e,
+	0xe9,0xcc,0x65,0xbf,
+	0xb9,0xf5,0x6,0x3f};
+const float* LP_a = (float*) LP_a_bytes;
+
+const int8_t LP_b_bytes[24]={0x74,0x11,0x98,0x3c,
+	0x74,0x11,0x18,0x3d,
+	0x75,0x11,0x98,0x3c,
+	0x0,0x0,0x80,0x3f,
+	0x0,0x0,0x0,0x40,
+	0x0,0x0,0x80,0x3f};
+const float* LP_b = (float*) LP_b_bytes;
+
+//Delay Variables
+float LP_w[4]={0,0,0,0};
+
+float filterCascatetSignal(float x)
+{
+	float y;
+	float w;
+	//Section 0
+	w = x-LP_w[0]*LP_a[0]-LP_w[1]*LP_a[1];
+	y = w*LP_b[0]+LP_w[0]*LP_b[1]+LP_w[1]*LP_b[2];
+	LP_w[1]=LP_w[0];
+	LP_w[0]=w;
+	//Section 1
+	w = y-LP_w[2]*LP_a[2]-LP_w[3]*LP_a[3];
+	y = w*LP_b[3]+LP_w[2]*LP_b[4]+LP_w[3]*LP_b[5];
+	LP_w[3]=LP_w[2];
+	LP_w[2]=w;
 	return y;
 }
 
@@ -215,6 +266,8 @@ int main(void)
   filtro_low_pass2 = filter2_create();
   filter2_init(filtro_low_pass2);
 
+
+
   //DEBUG
 //  int contadorDeLinhas = 1;
   while (1)
@@ -233,13 +286,20 @@ int main(void)
 		  while (contadorDeAmostras < NumAmostras){
 
 			 int_sai_data_filter[contadorDeAmostras]= (float) sai_data[contadorDeAmostras];
-			 //filter1_filterBlock(filtro_low_pass, int_sai_data_filter, sai_data_filter, contadorDeAmostras);
-//			 filter2_filterBlock(filtro_low_pass2, int_sai_data_filter, sai_data_filter, contadorDeAmostras);
+			 start_get_time = HAL_GetTick();
 
-			// sai_data_filter[contadorDeAmostras]= LP_Update(int_sai_data_filter[contadorDeAmostras]);
+// filtro com biblioteca CMSIS
+			 filterCMSIS_filterBlock(filtro_low_pass, int_sai_data_filter, sai_data_filter, contadorDeAmostras);
+//// filtro com implementação C com ponteiro
+//			 filterC_filterBlock(filtro_low_pass2, int_sai_data_filter, sai_data_filter, contadorDeAmostras);
+//  filtro com implementação C vetores
+//			 sai_data_filter[contadorDeAmostras]= filterCascatetSignal(int_sai_data_filter[contadorDeAmostras]);
 
 
-			  sprintf(dado_formatado, "%f ", int_sai_data_filter[contadorDeAmostras]);
+			  stop_get_time = start_get_time - HAL_GetTick();
+			 //stop_get_time = start_get_time - stop_get_time;
+
+			  sprintf(dado_formatado, "%f ", sai_data_filter[contadorDeAmostras]);
 			  strcat(msg, dado_formatado);
 
 			  contadorDeAmostras++;
@@ -247,7 +307,8 @@ int main(void)
 
 		  if (contadorDeAmostras >= NumAmostras){
 
-//			   filterSignal(int_sai_data_filter, sai_data_filter, contadorDeAmostras);
+//// filtro com vetores forma direta
+//			  filterDirectSignal(int_sai_data_filter, sai_data_filter, contadorDeAmostras);
 //
 //			  for(int x = 0 ; x<contadorDeAmostras;x++){
 //				  sprintf(dado_formatado, "%f ", sai_data_filter[x]);
